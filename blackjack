@@ -1,0 +1,143 @@
+from itertools import product
+from random import shuffle
+from typing import List
+from art import art,win,lose,tie
+import os
+import time
+
+evaluation = {'A' : 11, '2' : 2, '3': 3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'J':10,'Q':10,'K':10}
+suits = {'Hearts' : chr(9829), 'Spades' : chr(9824), 'Clubs' : chr(9827), 'Diamonds' : chr(9830)}
+BACKSIDE  = 'backside'
+def clear():
+  os.system('cls')
+
+class Deck:
+    card_ranks = []
+    card_suits = []
+
+    def __init__(self) -> None:
+        self.cards = []
+        self.refresh_deck()
+
+    def refresh_deck(self) -> int:
+        self.cards = list(product(self.card_ranks, self.card_suits))
+
+    def shuffle(self) -> None:
+        shuffle(self.cards)
+
+    def draw_card(self):
+        return self.cards.pop()
+
+class FrenchDeck(Deck):
+  card_ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+  card_suits = ['Hearts', 'Spades', 'Clubs', 'Diamonds']
+
+class Game:
+    def __init__(self) -> None:
+      self.deck = FrenchDeck()
+      self.deck.shuffle()
+      self.dealer_turn = False
+      print(art)
+
+    def draw_card(self):
+      self.player_hand.append(self.deck.draw_card())
+
+    def display_cards(self,cards):
+      rows = ['', '', '', '', '']
+      for card in cards:
+        rows[0] += ' ___  '  # Print the top line of the card.
+        if card == BACKSIDE:
+             # Print a card's back:
+             rows[1] += '|## | '
+             rows[2] += '|###| '
+             rows[3] += '|_##| '
+        else:
+          rank, suit = card[0],card[1]  # The card is a tuple data structure.
+          rows[1] += '|{} | '.format(rank.ljust(2))
+          rows[2] += '| {} | '.format(suits[suit])
+          rows[3] += '|_{}| '.format(rank.rjust(2, '_'))
+         # Print each row on the screen:
+      for row in rows:
+        print(row)
+
+    def display_hands(self):
+        print('Dealer hand : ')
+        if not self.dealer_turn:
+          self.display_cards([BACKSIDE,self.dealer_hand[-1]])
+          print(f'Dealer Hand Value : ???')
+        else:
+          self.display_cards(self.dealer_hand)
+          print(f'Dealer Hand Value: {self.hand_value(self.dealer_hand)}')
+        print('Player Hand:')
+        self.display_cards(self.player_hand)
+        print(f'Your hand value : {self.hand_value(self.player_hand)}')
+                
+
+        
+
+    def hand_value(self, hand : List):
+      value = 0
+      for card in hand:
+        value+=evaluation[card[0]]
+      return value
+
+    def dealer_play(self):
+      self.dealer_turn=True
+      while self.hand_value(self.dealer_hand)<17:
+        self.dealer_hand.append(self.deck.draw_card())
+        self.display_hands()
+        time.sleep(3)
+        if self.hand_value(self.dealer_hand) > 21:
+          print(win)
+          return True
+        if self.hand_value(self.dealer_hand) == 21 and self.hand_value(self.player_hand)!=21:
+          print(lose)
+          return True
+      self.display_hands()
+      time.sleep(3)
+      if self.hand_value(self.dealer_hand)>self.hand_value(self.player_hand): 
+        print(lose)
+        return True
+      elif  self.hand_value(self.dealer_hand)==self.hand_value(self.player_hand):
+        print(tie)
+        return True
+      print(win)
+      return True
+
+    def play(self) -> None:
+      self.dealer_hand = []
+      self.player_hand = []
+      self.dealer_hand.append(self.deck.draw_card())
+      self.dealer_hand.append(self.deck.draw_card())
+      self.draw_card()
+      self.draw_card()
+      self.display_hands()
+      while self.hand_value(self.player_hand)<21:
+        option = input('Hit or Stand? (H/S)')
+        if option.upper()=='H':
+          self.draw_card()
+          self.display_hands()
+          time.sleep(3)
+          if self.hand_value(self.player_hand)==21:
+            print(win)
+            break
+          if self.hand_value(self.player_hand)>21:
+            print(lose)
+            break
+        elif option.upper()=='S':
+          self.dealer_play()
+          break
+
+if __name__=='__main__':
+  game = Game()
+  game.play()
+  while True:
+    option = input('Do you want to play one more time?(y/n) ')
+    if option=='y':
+      clear()
+      game = Game()
+      game.play()
+    elif option=='n':
+      clear()
+      break
+  print('Thanks for playing!')
