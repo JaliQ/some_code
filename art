@@ -1,0 +1,43 @@
+art = '''Rules:
+      Try to get as close to 21 without going over.
+      Kings, Queens, and Jacks are worth 10 points.
+      Aces are worth 1 or 11 points.
+      Cards 2 through 10 are worth their face value.
+      (H)it to take another card.
+      (S)tand to stop taking cards.
+      In case of a tie, the bet is returned to the player.
+      Dealer stops at 17.
+      '''
+
+tie = '''
+  _______ _      
+ |__   __(_)     
+    | |   _  ___ 
+    | |  | |/ _ \        
+    | |  | |  __/
+    |_|  |_|\___|        
+                                           
+                                               
+'''      
+lose = '''
+                                                   
+                                                  
+ __     __           _                    
+ \ \   / /          | |                           
+  \ \_/ /__  _   _  | |     ___  ___  ___ 
+   \   / _ \| | | | | |    / _ \/ __|/ _ \   
+    | | (_) | |_| | | |___| (_) \__ \  __/ 
+    |_|\___/ \__,_| |______\___/|___/\___|        
+                                                  
+
+                     
+'''
+win = '''
+ __     __          __          __       
+ \ \   / /          \ \        / (_)      
+  \ \_/ /__  _   _   \ \  /\  / / _ _ __  
+   \   / _ \| | | |   \ \/  \/ / | | '_ \ 
+    | | (_) | |_| |    \  /\  /  | | | | |
+    |_|\___/ \__,_|     \/  \/   |_|_| |_|
+                                          
+'''
