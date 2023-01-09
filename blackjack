@@ -77,8 +77,13 @@ class Game:
 
     def hand_value(self, hand : List):
       value = 0
+      ace = False
       for card in hand:
         value+=evaluation[card[0]]
+        if card[0]=='A':
+          ace=True
+      if ace and value>21:
+        value-=10
       return value
 
     def dealer_play(self):
